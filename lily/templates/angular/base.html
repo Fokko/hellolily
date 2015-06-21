@@ -110,7 +110,13 @@
             var host = location.origin.replace(/^http/, 'ws');
             var ws = new WebSocket(host);
             ws.onmessage = function (event) {
-                console.log(event.data);
+                var data = JSON.parse(event.data);
+                if (data == 'ping') {
+                    console.log('pong');
+                } else {
+                    toastr.success(data);
+                    console.log(data);
+                }
             };
         </script>
         {% verbatim %}

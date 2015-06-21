@@ -1,3 +1,6 @@
+import os
+from urlparse import urlparse
+from redis import Redis
 import requests
 
 from django.conf import settings
@@ -72,6 +75,8 @@ class CallerName(APIView):
         phone_number = request.GET.get('phonenumber', '')
         caller_name = request.GET.get('callername', '')
 
+        contact_id = None
+        account_id = None
         if not phone_number:
             return HttpResponse()
 
@@ -83,6 +88,7 @@ class CallerName(APIView):
 
         if contact:
             name = contact.full_name()
+            contact_id = contact.id
         else:
             account = Account.objects.filter(
                 Q(phone_numbers__raw_input__endswith=phone_number_end) | Q(phone_numbers__number__endswith=phone_number_end)
@@ -90,8 +96,17 @@ class CallerName(APIView):
 
             if account:
                 name = account.name
+                account_id = account.id
             else:
                 name += caller_name
+
+        redis_path = urlparse(os.environ.get('REDISTOGO_URL', 'redis://localhost:6379'))
+        redis = Redis(redis_path.hostname, port=redis_path.port, password=redis_path.password)
+        redis.publish('test channel', {
+            'name': name,
+            'contact_id': contact_id,
+            'account_id': account_id,
+        })
 
         return HttpResponse('status=ACK&callername=%s' % name, content_type='application/x-www-form-urlencoded')
 

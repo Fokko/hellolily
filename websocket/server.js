@@ -1,16 +1,18 @@
-var http = require('http'),
-    httpProxy = require('http-proxy');
+var WebSocketServer = require('ws').Server;
+var express = require('express');
+var http = require('http');
+var redis = require('redis');
+var httpProxy = require('http-proxy');
+var url = require('url');
 
 process.on('uncaughtException', function (err) {
     console.log(err);
 });
 
-//// websockets
+//// WebSocket
 
-var WebSocketServer = require("ws").Server;
-var express = require("express");
+
 var app = express();
-
 var webSocketPort = 9000;
 if (process.env.PORT == webSocketPort) {
     webSocketPort++;
@@ -19,24 +21,47 @@ if (process.env.PORT == webSocketPort) {
 var socketServer = http.createServer(app);
 socketServer.listen(webSocketPort);
 
-console.log("http server listening on %d", webSocketPort);
+console.log('http server listening on %d', webSocketPort);
 
 var wss = new WebSocketServer({server: socketServer});
-console.log("websocket server created");
+console.log('websocket server created');
 
-wss.on("connection", function(ws) {
-  var id = setInterval(function() {
-    ws.send(JSON.stringify(new Date()), function() {  })
-  }, 1000);
+var clients = [];
+wss.on('connection', function(socket) {
 
-  console.log("websocket connection open");
+    console.log('websocket connection open');
+    clients.push(socket);
 
-  ws.on("close", function() {
-    console.log("websocket connection close");
-    clearInterval(id);
-  })
+    var pingInterval = setInterval(function (){
+        socket.send(JSON.stringify('ping'));
+    }, 10000);
+
+    socket.on('close', function() {
+        console.log('websocket connection close');
+        clients.splice(clients.indexOf(socket), 1);
+        clearInterval(pingInterval);
+    });
 });
 
+///// Redis
+
+var redisClient;
+if (process.env.REDISTOGO_URL) {
+    var rtg   = url.parse(process.env.REDISTOGO_URL);
+    redisClient = redis.createClient(rtg.port, rtg.hostname);
+    redisClient.auth(rtg.auth.split(':')[1]);
+} else {
+    redisClient = redis.createClient(6379, 'redis');
+}
+
+redisClient.subscribe('test channel');
+redisClient.on('message', function (channel, message) {
+    console.log('redis message on node server');
+    // Broadcast the message to all connected clients on this server.
+    for (var i=0; i<clients.length; i++) {
+        clients[i].send(JSON.stringify(message));
+    }
+});
 
 //
 // Create a proxy server with custom application logic
@@ -75,11 +100,6 @@ var django = new httpProxy.createProxyServer({
 var node = new httpProxy.createProxyServer({
     target: nodeWsTarget
 });
-//
-// Create your custom server and just call `proxy.web()` to proxy
-// a web request to the target passed in the options
-// also you can use `proxy.ws()` to proxy a websockets request
-//
 var server = http.createServer(function(req, res) {
     django.web(req, res);
 });
