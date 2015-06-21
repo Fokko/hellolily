@@ -11,12 +11,23 @@ redis:
   ports:
     - 6373:6379
 web:
+  build: Dockers/proxy
+  command: node websocket/server.js
+  volumes:
+    - .:/home/docker/hellolily
+  working_dir: /home/docker/hellolily
+  ports:
+    - 8003:8001
+  links:
+    - django
+    - redis
+django:
   build: .
   command: python manage.py runserver 0:8000
   volumes:
     - .:/home/docker/hellolily
   ports:
-    - 8003:8000
+    - 8004:8000
   links:
     # Define all containers for easy running of development setup.
     - db

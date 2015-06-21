@@ -1,7 +1,7 @@
 import os
 
 # Bind to specified ip and port
-bind = '%s:%s' % (os.environ.get('IP_ADDRESS', '0.0.0.0'), os.environ.get('PORT', '8000'))
+bind = '%s:%s' % (os.environ.get('IP_ADDRESS', '0.0.0.0'), os.environ.get('DJANGO_PORT', '8000'))
 
 # Use this worker class
 worker_class = '%s' % os.environ.get('WORKER_CLASS', 'gevent')

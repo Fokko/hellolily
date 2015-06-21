@@ -105,6 +105,14 @@
                 isSuperUser: '{{ user.is_superuser }}' == 'True'
             };
         </script>
+        <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+        <script>
+            var host = location.origin.replace(/^http/, 'ws');
+            var ws = new WebSocket(host);
+            ws.onmessage = function (event) {
+                console.log(event.data);
+            };
+        </script>
         {% verbatim %}
         {% endverbatim %}{% include 'angular/includes.html' %}{% verbatim %}
         <!-- END JAVASCRIPTS -->

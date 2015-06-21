@@ -1,0 +1,2 @@
+web: bin/start-pgbouncer-stunnel newrelic-admin run-program gunicorn --config=lily/settings/gunicorn.py lily.wsgi:application
+node: node websocket/server.js
