@@ -49,6 +49,7 @@ function AccountCreateController($scope, $state, $stateParams, Account, User, HL
         name: [],
     };
 
+    vm.checkDomainForDuplicates = checkDomainForDuplicates;
     vm.loadDataproviderData = loadDataproviderData;
     vm.saveAccount = saveAccount;
     vm.cancelAccountCreation = cancelAccountCreation;
@@ -127,6 +128,15 @@ function AccountCreateController($scope, $state, $stateParams, Account, User, HL
     function _getFullName(user) {
         // $.grep removes values that are empty so the .join doesn't have double spaces
         return $.grep([user.first_name, user.preposition, user.last_name], Boolean).join(' ');
+    }
+
+    function checkDomainForDuplicates(form) {
+        var website = form.primaryWebsite.$viewValue;
+        Account.search({filterquery: 'website:' + website}).$promise.then(function(result) {
+            if (result.length > 0) {
+                toastr.warning(website + ' is also used for another account.');
+            }
+        });
     }
 
     function loadDataproviderData(form) {
