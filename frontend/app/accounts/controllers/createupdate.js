@@ -48,6 +48,8 @@ function AccountCreateController($scope, $state, $stateParams, Account, User, HL
     vm.errors = {
         name: [],
     };
+    vm.useDuplicateWebsite = false;
+
 
     vm.checkDomainForDuplicates = checkDomainForDuplicates;
     vm.loadDataproviderData = loadDataproviderData;
@@ -131,17 +133,66 @@ function AccountCreateController($scope, $state, $stateParams, Account, User, HL
     }
 
     function checkDomainForDuplicates(form) {
-        var website = form.primaryWebsite.$viewValue;
-        Account.search({filterquery: 'website:' + website}).$promise.then(function(result) {
-            if (result.length > 0) {
-                toastr.warning(website + ' is also used for another account.');
+        var website = vm.account.primaryWebsite;
+        var domain;
+
+        if (website) {
+            domain = getDomain(website);
+
+            if (vm.useDuplicateWebsite) {
+                if (form) {
+                    vm.saveAccount(form);
+                } else {
+                    vm.loadDataproviderData();
+                }
+            } else {
+                Account.searchByWebsite({website: domain}).$promise.then(function(result) {
+                    if (result.data && result.data.id != $stateParams.id) {
+                        bootbox.dialog({
+                            message: 'This website has already been added to an existing account: <br />' +
+                            result.data.name + '<br />' +
+                            'Are you sure you want to use: <br />' +
+                            website,
+                            title: 'Website already exists',
+                            buttons: {
+                                danger: {
+                                    label: 'No, clear the field.',
+                                    className: 'btn-danger',
+                                    callback: function() {
+                                        vm.account.primaryWebsite = null;
+                                        vm.useDuplicateWebsite = false;
+                                        $scope.$apply();
+                                    },
+                                },
+                                success: {
+                                    label: 'Yes',
+                                    className: 'btn-success',
+                                    callback: function() {
+                                        if (form) {
+                                            vm.saveAccount(form);
+                                        } else {
+                                            vm.loadDataproviderData();
+                                            vm.useDuplicateWebsite = true;
+                                        }
+                                    },
+                                },
+                            },
+                        });
+                    } else {
+                        if (form) {
+                            vm.saveAccount(form);
+                        } else {
+                            vm.loadDataproviderData();
+                        }
+                    }
+                });
             }
-        });
+        }
     }
 
-    function loadDataproviderData(form) {
+    function loadDataproviderData() {
         toastr.info('Running around the world to fetch info', 'Here we go');
-        vm.account.getDataproviderInfo(form.primaryWebsite.$modelValue).then(function() {
+        vm.account.getDataproviderInfo(vm.account.primaryWebsite).then(function() {
             toastr.success('Got it!', 'Whoohoo');
         }, function() {
             toastr.error('I couldn\'t find any data', 'Sorry');
@@ -249,5 +300,35 @@ function AccountCreateController($scope, $state, $stateParams, Account, User, HL
         HLForms.setErrors(form, response.data);
 
         toastr.error('Uh oh, there seems to be a problem', 'Oops!');
+    }
+
+    function getHostName(url) {
+        var match = url.match(/:\/\/(www[0-9]?\.)?(.[^/:]+)/i);
+
+        if (match !== null && match.length > 2 && typeof match[2] === 'string' && match[2].length > 0) {
+            return match[2];
+        } else {
+            return url;
+        }
+    }
+
+    function getDomain(url) {
+        var hostName = getHostName(url);
+        var domain = hostName;
+        var parts;
+
+        if (hostName !== null) {
+            parts = hostName.split('.').reverse();
+
+            if (parts !== null && parts.length > 1) {
+                domain = parts[1] + '.' + parts[0];
+
+                if (hostName.toLowerCase().indexOf('.co.uk') !== -1 && parts.length > 2) {
+                    domain = parts[2] + '.' + domain;
+                }
+            }
+        }
+
+        return domain;
     }
 }

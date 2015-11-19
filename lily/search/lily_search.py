@@ -205,6 +205,17 @@ class LilySearch(object):
             }
         })
 
+    def like_filter_query(self, filterquery):
+        self.raw_filters.append({
+            'query': {
+                'fuzzy_like_this_field': {
+                    'website': {
+                        'like_text': filterquery,
+                    }
+                }
+            }
+        })
+
     def account_related(self, account_id):
         """
         Search email related to an account.

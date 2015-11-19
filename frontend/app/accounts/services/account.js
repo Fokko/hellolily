@@ -36,6 +36,9 @@ function Account($http, $q, $resource) {
             searchByEmail: {
                 url: '/search/emailaddress/:email_address',
             },
+            searchByWebsite: {
+                url: '/search/website/:website',
+            },
         });
 
     Account.getAccounts = getAccounts;
