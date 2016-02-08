@@ -7,8 +7,8 @@
         <a class="link-no-decoration" ui-sref="base.cases.detail({ id: vm.item.id })">{{ ::vm.item.subject }}</a>
 
         <div class="btn-group pull-right">
-            <a class="text-white" data-toggle="dropdown" aria-expanded="false">
-                <i class="fa fa-angle-down"></i>
+            <a class="history-item-options" data-toggle="dropdown" aria-expanded="false">
+                <i class="lilicon hl-toggle-down-icon"></i>
             </a>
 
             <ul class="dropdown-menu pull-right">
@@ -58,21 +58,24 @@
     <history-add-note item="vm.item"></history-add-note>
 
     <div class='history-item-body next' ng-repeat="note in vm.item.notes">
-        <p class='inline-header'><i class="fa fa-sticky-note"></i> Note</p>
-        <p>{{ ::note.content }}</p>
-        <ul class="list-inline list-justified">
-            <li>
-                <small class="text-muted" uib-tooltip="Created on {{ ::note.date | date:'dd MMMM yy' }} at {{ ::note.date | date:'HH:mm' }}">
-                    <i class="fa fa-calendar"></i>
-                    {{ ::note.date | date:'dd MMMM yy HH:mm' }}
-                </small>
-            </li>
-            <li>
-                <small class="text-muted" uib-tooltip="Created by: {{ ::note.author }}">
-                    <i class="fa fa-user"></i>
-                    {{ ::note.author }}
-                </small>
-            </li>
-        </ul>
+        <div class='inline-header'><i class="lilicon hl-note-icon"></i> Note</div>
+        <div class="inline-body">
+            <p>{{ ::note.content }}</p>
+
+            <ul class="list-inline list-justified">
+                <li>
+                    <small class="text-muted" uib-tooltip="Created on {{ ::note.date | date:'dd MMMM yy' }} at {{ ::note.date | date:'HH:mm' }}">
+                        <i class="lilicon hl-calender-icon"></i>
+                        {{ ::note.date | date:'dd MMMM yy HH:mm' }}
+                    </small>
+                </li>
+                <li>
+                    <small class="text-muted" uib-tooltip="Created by: {{ ::note.author }}">
+                        <i class="fa fa-user"></i>
+                        {{ ::note.author }}
+                    </small>
+                </li>
+            </ul>
+        </div>
     </div>
 </div>

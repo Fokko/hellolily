@@ -1,17 +1,21 @@
 <div class="row">
     <div class="col-md-12">
-        <ul class="mix-filter text-center">
-            <li ng-repeat="(typeKey, typeVal) in history.types" ng-show="typeVal.visible" ng-class="{'active': history.activeFilter == typeKey}" ng-click="history.activeFilter = typeKey">
-                {{ typeVal.name }}
-            </li>
-        </ul>
+
 
         <div class="widget-container">
             <div class="widget-heading">
                 <div class="history-detail-header">
                     History
                 </div>
+                <div class="history-detail-filters">
+                    <div class="filter-group">
+                        <label class="filter-group-option" ng-repeat="(typeKey, typeVal) in history.types" ng-show="typeVal.visible" ng-class="{'active': history.activeFilter == typeKey}" ng-click="history.activeFilter = typeKey">
+                            {{ typeVal.name }}
+                        </label>
+                    </div>
+                </div>
             </div>
+
             <div class="widget-body">
                 <div class="widget-content">
                     <ul class="history-timeline">
