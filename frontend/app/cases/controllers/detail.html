@@ -35,14 +35,14 @@
 
     <div ng-if="vm.case.id" class="col-md-4">
         <dashboard-widget ng-if="vm.case.account" widget-name="'Account info'">
-            <div name="widget-title">
+            <widget-header>
                 <a ui-sref="base.accounts.detail({ id: vm.case.account })">
                     <i class="lilicon hl-company-icon"></i>
                     {{ vm.case.account_name }}
                 </a>
-            </div>
+            </widget-header>
 
-            <div name="portlet-body" class="widget-content">
+            <widget-body class="widget-content">
                 <ul class="case-detail-block-list">
                     <li ng-if="vm.account.email_addresses.length">
                         <strong>E-mail addresses</strong>
@@ -80,19 +80,18 @@
                         No additional information
                     </li>
                 </ul>
-
-            </div>
+            </widget-body>
         </dashboard-widget>
 
         <dashboard-widget ng-if="vm.case.contact" widget-name="'Contact info'">
-            <div name="widget-title">
+            <widget-header>
                 <a ui-sref="base.contacts.detail({ id: vm.case.contact })">
                     <i class="lilicon hl-user-icon"></i>
                     {{ vm.case.contact_name }}
                 </a>
-            </div>
+            </widget-header>
 
-            <div name="portlet-body" class="widget-content">
+            <widget-body class="widget-content">
                 <ul class="case-detail-block-list">
                     <li ng-if="vm.contact.email_addresses.length">
                         <strong>E-mail addresses: </strong>
@@ -110,16 +109,16 @@
                         No additional information
                     </li>
                 </ul>
-            </div>
+            </widget-body>
         </dashboard-widget>
 
         <dashboard-widget widget-name="'More info'">
-            <div name="widget-title">
+            <widget-header>
                 <i class="fa fa-info"></i>
                 More info
-            </div>
+            </widget-header>
 
-            <div name="portlet-body" class="widget-content">
+            <widget-body class="widget-content">
                 <ul class="case-detail-block-list">
                     <li>
                         <strong>Assigned to:</strong>
@@ -132,24 +131,22 @@
                     <li>
                         <strong>Expires on:</strong>
                         <span>{{ vm.case.expires | date:"d MMM y" }}</span>
-                        <!--<a ng-if="vm.case" ng-click="vm.openPostponeWidget(vm.case)">-->
-                            <!--<i class="fa fa-history"></i>-->
-                        <!--</a>-->
+                        <postpone type="'Case'" object="vm.case" date-field="'expires'" display-date="false"></postpone>
                     </li>
                 </ul>
-            </div>
+            </widget-body>
         </dashboard-widget>
 
         <dashboard-widget widget-name="'Tags'">
-            <div name="widget-title">
+            <widget-header>
                 <i class="fa fa-tag"></i>
                 Tags
-            </div>
+            </widget-header>
 
-            <div name="portlet-body" class="widget-content">
+            <widget-body class="widget-content">
                 <span ng-if="vm.case.tag" class="case-detail-tag" ng-repeat="tag in vm.case.tag">{{ tag }}</span>
                 <span ng-if="!vm.case.tag">No tags</span>
-            </div>
+            </widget-body>
         </dashboard-widget>
     </div>
 </div>

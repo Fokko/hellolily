@@ -14,7 +14,10 @@ function dashboardWidget() {
         controller: DashboardWidgetController,
         controllerAs: 'vm',
         bindToController: true,
-        transclude: true,
+        transclude: {
+            widgetHeader: 'widgetHeader',
+            widgetBody: 'widgetBody',
+        },
     };
 }
 

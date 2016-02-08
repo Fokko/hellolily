@@ -40,7 +40,6 @@ function CaseDetailController($http, $scope, $stateParams, Settings, Case, Accou
     vm.assignCase = assignCase;
     vm.archive = archive;
     vm.unarchive = unarchive;
-    vm.openPostponeWidget = Case.openPostponeWidget;
 
     activate();
 
