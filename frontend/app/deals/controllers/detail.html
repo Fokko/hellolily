@@ -64,7 +64,7 @@
         </div>
     </div>
     <div class="col-md-6">
-      <div class="portlet light">
+        <div class="portlet light">
             <div class="portlet-body">
                 <div class="row">
                     <div class="col-md-12 deal-detail-info">
@@ -83,6 +83,10 @@
                         <div>
                             <label>Status</label> {{ vm.deal.stage_name }}
                             <span ng-show="vm.deal.archived">- Archived</span>
+                        </div>
+                        <div ng-show="vm.deal.stage == 3">
+                            <label>Why lost</label>
+                            {{ ::vm.deal.why_lost }}
                         </div>
                         <div>
                             <label>Twitter checked</label>

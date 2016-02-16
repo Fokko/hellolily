@@ -25,8 +25,8 @@ function dealsConfig($stateProvider) {
 
 angular.module('app.deals').controller('DealDetailController', DealDetailController);
 
-DealDetailController.$inject = ['$http', '$scope', 'Settings', 'DealStages', 'deal'];
-function DealDetailController($http, $scope, Settings, DealStages, deal) {
+DealDetailController.$inject = ['$http', '$scope', '$state', '$uibModal', 'Settings', 'DealStages', 'deal'];
+function DealDetailController($http, $scope, $state, $uibModal, Settings, DealStages, deal) {
     $scope.deal = deal;
     var vm = this;
 
@@ -46,6 +46,14 @@ function DealDetailController($http, $scope, Settings, DealStages, deal) {
      * Change the state of a deal
      */
     function changeState(stage) {
+        if (stage === 3) {
+            whyLost(vm.deal, stage);
+        } else {
+            _updateStage(stage);
+        }
+    }
+
+    function _updateStage(stage) {
         var req = {
             method: 'POST',
             url: '/deals/update/stage/' + vm.deal.id + '/',
@@ -53,17 +61,18 @@ function DealDetailController($http, $scope, Settings, DealStages, deal) {
             headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'},
         };
 
-        $http(req).
-            success(function(data) {
-                vm.deal.stage = stage;
-                vm.deal.stage_name = data.stage;
-                vm.deal.closed_date = data.closed_date;
+        $http(req).success(function(data) {
+            vm.deal.stage = stage;
+            vm.deal.stage_name = data.stage;
+            vm.deal.closed_date = data.closed_date;
+            if (stage === 3) {
+                $state.go($state.current, {}, {reload: true});
+            }
 
-                $scope.loadNotifications();
-            }).
-            error(function(data, status, headers, config) {
-                // Request failed propper error?
-            });
+            $scope.loadNotifications();
+        }).error(function(data, status, headers, config) {
+            // Request failed propper error?
+        });
     }
 
     /**
@@ -104,5 +113,25 @@ function DealDetailController($http, $scope, Settings, DealStages, deal) {
             error(function(data, status, headers, config) {
                 // Request failed proper error?
             });
+    }
+
+    function whyLost(myDeal, stage) {
+        var modalInstance = $uibModal.open({
+            templateUrl: 'deals/controllers/whylost.html',
+            controller: 'WhyLostModal',
+            controllerAs: 'vm',
+            size: 'sm',
+            resolve: {
+                myDeal: function() {
+                    return myDeal;
+                },
+            },
+        });
+
+        modalInstance.result.then(function() {
+            _updateStage(stage);
+        }, function() {
+            $state.go($state.current, {}, {reload: true});
+        });
     }
 }

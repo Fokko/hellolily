@@ -9,8 +9,8 @@ from rest_framework.viewsets import ModelViewSet
 from lily.api.filters import ElasticSearchFilter
 from lily.tenant.api.mixins import SetTenantUserMixin
 
-from .serializers import DealSerializer, DealNextStepSerializer, DealWhyCustomerSerializer
-from ..models import Deal, DealNextStep, DealWhyCustomer
+from .serializers import DealSerializer, DealNextStepSerializer, DealWhyCustomerSerializer, DealWhyLostSerializer
+from ..models import Deal, DealNextStep, DealWhyCustomer, DealWhyLost
 
 
 class DealStagesList(APIView):
@@ -39,6 +39,14 @@ class DealWhyCustomerViewSet(SetTenantUserMixin, ModelViewSet):
         Set the queryset here so it filters on tenant and works with pagination.
         """
         return super(DealWhyCustomerViewSet, self).get_queryset().all()
+
+
+class DealWhyLostViewSet(SetTenantUserMixin, ModelViewSet):
+    queryset = DealWhyLost.objects
+    serializer_class = DealWhyLostSerializer
+
+    def get_queryset(self):
+        return super(DealWhyLostViewSet, self).get_queryset().all()
 
 
 class DealNextStepViewSet(SetTenantUserMixin, ModelViewSet):
@@ -79,6 +87,7 @@ class DealFilter(django_filters.FilterSet):
             'stage': ['exact', ],
             'twitter_checked': ['exact', ],
             'why_customer': ['exact', ],
+            'why_lost': ['exact', ],
         }
 
 
