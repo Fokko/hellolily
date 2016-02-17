@@ -9,11 +9,14 @@
 }
 
 .btn.blue {
-    background-color: #5B9BD1;
+    background-color: $lilyBlue;
+
     &:hover {
         background-color: #3175AF;
     }
-    &:active, &:focus {
+
+    &:active,
+    &:focus {
         background-color: #3071A9;
     }
 }
@@ -22,12 +25,15 @@
     width: 100%;
     display: table;
     table-layout: fixed;
+
     li {
         display: table-cell;
         text-align: center;
+
         &:first-of-type {
             text-align: left;
         }
+
         &:last-of-type {
             text-align: right;
             padding-right: 0;
@@ -48,9 +54,9 @@
 /*  TEXT STUFF */
 
 .text-white {
-    color: #fff;
+    color: $white;
     &:hover {
-        color: #fff;
+        color: $white;
     }
 }
 

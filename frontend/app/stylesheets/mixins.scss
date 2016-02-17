@@ -6,11 +6,11 @@ Yourself) and maintainable.
 */
 
 @function text-color($text-color) {
-    @if (lightness($text-color) >  60) {
-        @return #000000;
+    @if (lightness($text-color) > 60) {
+        @return $black;
     }
     @else {
-        @return #ffffff;
+        @return $white;
     }
 }
 

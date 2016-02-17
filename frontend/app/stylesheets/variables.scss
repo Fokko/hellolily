@@ -12,6 +12,9 @@ It can never contain a blue value. Instead a variable name like
 `$criticalPrioColor: #dfba49;` is prefered. This variable name creates meaning to it.
 */
 
+$white: #fff;
+$black: #000;
+
 // Colors
 $lightGrey: #f5f6fa;
 
@@ -24,11 +27,11 @@ $lightBorderColor: #e5e9f0;
 $navyBlue: #5b667b;
 
 $lilyBorderDark: $baseBorderColor;
-$lilyBorderLight: #EEF2F6;
+$lilyBorderLight: #eef2f6;
 $lilyWhiteTone: #fcfcfe;
 $lilyWhiteToneHover: #f6f9fb;
 $lilyDarkBlue: #5b667b;
-$lilyGreen: #01B55F;
+$lilyGreen: #01b55f;
 $lilyHeaderBg: #edf0f8;
 
 $bulletColor1: #7dc9fa;

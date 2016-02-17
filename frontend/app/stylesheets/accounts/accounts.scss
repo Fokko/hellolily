@@ -4,15 +4,16 @@
     padding: 0;
 
     li {
-        color: #555;
+        color: #555555;
         cursor: pointer;
         padding: 6px 15px;
         margin-right: 2px;
         margin-bottom: 5px;
         display: inline-block;
 
-        &:hover, &.active {
-            color: #fff;
+        &:hover,
+        &.active {
+            color: $white;
             background: #0da3e2;
         }
     }

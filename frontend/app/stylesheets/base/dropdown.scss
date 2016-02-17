@@ -26,8 +26,8 @@
     list-style: none;
     margin: 0;
     padding: 0;
-    background: #5b667b;
-    border: 1px solid #5b667b;
+    background: $lilyDarkBlue;
+    border: 1px solid $lilyDarkBlue;
     min-width: 160px;
 
     &.right-aligned {
@@ -55,19 +55,19 @@
     }
 
     &.white-menu {
-        background: #ffffff;
-        border: 1px #ced9e3 solid;
+        background: $white;
+        border: 1px $baseBorderColor solid;
 
         &:before {
-            border-bottom: 8px solid #ced9e3;
+            border-bottom: 8px solid $baseBorderColor;
         }
 
         &:after {
-            border-bottom: 7px solid #ffffff;
+            border-bottom: 7px solid $white;
         }
 
         .drop-down-sub-menu-item a {
-            color: #5b667b;
+            color: $lilyDarkBlue;
 
             &:hover {
                 background: $skyGrey;
@@ -81,7 +81,7 @@
         right: auto;
         display: inline-block !important;
         border-right: 8px solid transparent;
-        border-bottom: 8px solid #5b667b;
+        border-bottom: 8px solid $lilyDarkBlue;
         border-left: 8px solid transparent;
         content: '';
     }
@@ -92,7 +92,7 @@
         right: auto;
         display: inline-block !important;
         border-right: 7px solid transparent;
-        border-bottom: 7px solid #5b667b;
+        border-bottom: 7px solid $lilyDarkBlue;
         border-left: 7px solid transparent;
         content: '';
     }
@@ -106,11 +106,11 @@
     color: #d4dadf;
 
     &:hover {
-        background: darken(#5b667b, 10);
+        background: darken($lilyDarkBlue, 10);
     }
 }
 
 .drop-down-sub-menu .divider {
     margin: 5px;
-    border-bottom: 1px lighten(#5b667b,10) solid;
+    border-bottom: 1px lighten($lilyDarkBlue, 10) solid;
 }
