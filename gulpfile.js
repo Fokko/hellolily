@@ -24,6 +24,7 @@ var uglify = require('gulp-uglify');  // minify javascript file
 var uglifyCss = require('gulp-uglifycss');  // minify css file
 var watch = require('gulp-watch');  // Optimized file change watcher
 var wrap = require('gulp-wrap');  // surround current file(s) with other content (IIFE eg.)
+var sassLint = require('gulp-sass-lint');
 /**
  * Config for Gulp.
  */
@@ -188,6 +189,13 @@ gulp.task('app-css', [], function() {
             return shell(['styleguide']);
         }))
         .pipe(ifElse(isWatcher, livereload));
+});
+
+gulp.task('sass-lint', function() {
+    return gulp.src(config.app.sass.src)
+    .pipe(sassLint())
+    .pipe(sassLint.format())
+    .pipe(sassLint.failOnError());
 });
 
 /**
