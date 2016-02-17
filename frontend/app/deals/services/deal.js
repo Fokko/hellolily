@@ -105,6 +105,7 @@ function Deal($resource, HLUtils, HLForms) {
             feedback_form_sent: false,
             tags: [],
             currency: 'EUR',
+            assigned_to: currentUser.id,
         });
     }
 
