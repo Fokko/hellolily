@@ -647,7 +647,7 @@ class EmailMessageForwardView(EmailMessageReplyOrForwardView):
 
     @function_trace()
     def post(self, request, *args, **kwargs):
-        super(EmailMessageForwardView, self).post(request, *args, **kwargs)
+        return super(EmailMessageForwardView, self).post(request, *args, **kwargs)
 
     def get_form_kwargs(self):
         kwargs = super(EmailMessageComposeView, self).get_form_kwargs()
